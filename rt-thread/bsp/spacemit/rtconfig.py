@@ -45,6 +45,9 @@ if CPU == 'rt24':
     CFLAGS  = DEVICE + '-ffreestanding -flax-vector-conversions -Wno-cpp -fno-common -ffunction-sections -fdata-sections -fstrict-volatile-bitfields -fdiagnostics-color=always'
     AFLAGS  = ' -c' + DEVICE + ' -x assembler-with-cpp -D__ASSEMBLY__ '
     LFLAGS  = DEVICE + ' -nostartfiles -Wl,--no-whole-archive ' + ' -Xlinker --defsym=ENTRY_POINT=%s -T ./platform/%s/gcc.ld -Wl,-gc-sections -Wl,-Map=rtt.map' % (TARGET_ENTRY,CPU)
+    # Allow injecting extra link flags (e.g. -L<path>) from environment.
+    if os.getenv('EXTRA_LFLAGS'):
+        LFLAGS = ' ' + os.getenv('EXTRA_LFLAGS') + ' ' + LFLAGS
     CPATH   = ''
     LPATH   = ''
 
